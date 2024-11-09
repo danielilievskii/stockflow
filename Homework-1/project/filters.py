@@ -6,6 +6,8 @@ import os
 from crawler import fetch_company_data
 from config import BASE_URL, HEADERS, LATEST_DATE_CSV
 from data_utils import save_latest_dates_to_csv, load_latest_dates_from_csv
+import multiprocessing
+from multiprocessing import Pool, Manager
 
 
 # Filter 1: Fetch valid companies
@@ -33,15 +35,34 @@ async def filter_2_initialize_dates(companies):
     return company_latest_dates
 
 
-# Filter 3: Fetch missing data from last known date to today
-async def filter_3_fetch_missing_data(company_latest_dates):
-    print("Filter 3: Checking for missing data.")
+# Filter 3 - Fetch missing data in parallel
+def filter_3_fetch_missing_data(company_latest_dates):
     os.makedirs('data', exist_ok=True)
-    async with aiohttp.ClientSession() as session:
-        tasks = [fetch_company_data(session, company, last_date) for company, last_date in company_latest_dates.items()]
-        results = await asyncio.gather(*tasks)
+    num_cores = multiprocessing.cpu_count()
+    chunk_size = max(1, len(company_latest_dates) // num_cores)
+    company_chunks = [{k: company_latest_dates[k] for k in list(company_latest_dates)[i:i + chunk_size]}
+                      for i in range(0, len(company_latest_dates), chunk_size)]
 
-        new_company_latest_dates = {company_name: latest_date for company_name, latest_date in results}
-        save_latest_dates_to_csv(new_company_latest_dates)
+    with Manager() as manager:
+        new_dates = manager.dict()
 
-    print("Filter 3: Completed fetching and updating missing data.")
+        with Pool(num_cores) as pool:
+            results = pool.map(fetch_data_for_chunk, [(chunk, new_dates) for chunk in company_chunks])
+
+        all_latest_dates = {k: v for d in results for k, v in d.items()}
+        save_latest_dates_to_csv(all_latest_dates)
+        print("Filter 3: Completed fetching and updating missing data.")
+
+def fetch_data_for_chunk(args):
+    chunk, new_dates = args
+    async def process_chunk():
+        async with aiohttp.ClientSession() as session:
+            tasks = [fetch_company_data(session, company, last_date) for company, last_date in chunk.items()]
+            results = await asyncio.gather(*tasks)
+
+            for company_name, latest_date in results:
+                new_dates[company_name] = latest_date
+            return new_dates
+
+    loop = asyncio.get_event_loop()
+    return loop.run_until_complete(process_chunk())
