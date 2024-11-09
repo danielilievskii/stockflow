@@ -9,9 +9,11 @@ from data_utils import append_data_to_csv
 # Helper function for missing data fetch in Filter 3
 async def fetch_company_data(session, company_name, start_date):
     end_date = (date.today())
+    is_first_time = False
 
     if(start_date == None):
         start_date = end_date - timedelta(days=365 * 10)
+        is_first_time = True
     else:
         start_date = eu_format_to_datetime(start_date)
 
@@ -28,13 +30,14 @@ async def fetch_company_data(session, company_name, start_date):
                 data = scrape_data(page_content, company_name)
 
                 if data:
-                    dates = [eu_format_to_isoformat(row["Date"]) for row in data]
-                    max_date = max(dates)
+                    if is_first_time == False:
+                        dates = [eu_format_to_isoformat(row["Date"]) for row in data]
+                        max_date = max(dates)
 
-                    if max_date > latest_date:
-                        latest_date = max_date
-                    elif max_date == latest_date:
-                        break
+                        if max_date > latest_date:
+                            latest_date = max_date
+                        elif max_date == latest_date:
+                            break
 
                     append_data_to_csv(data, DATA_CSV)
 
