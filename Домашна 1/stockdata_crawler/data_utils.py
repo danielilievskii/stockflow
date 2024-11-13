@@ -14,3 +14,19 @@ def load_latest_dates_from_csv():
 def append_data_to_csv(data, csv_file_path):
     data_df = pd.DataFrame(data)
     data_df.to_csv(csv_file_path, mode='a', header=False, index=False)
+
+
+def create_csv(csv_file_path):
+    headers = [
+        "Company",
+        "Date",
+        "Closing Price",
+        "Max Price",
+        "Min Price",
+        "Avg Price",
+        "Percentage Change",
+        "Volume",
+        "Total Turnover"
+    ]
+    empty_df = pd.DataFrame(columns=headers)
+    empty_df.to_csv(csv_file_path, index=False)

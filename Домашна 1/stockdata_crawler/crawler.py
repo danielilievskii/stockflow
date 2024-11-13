@@ -10,6 +10,7 @@ from data_utils import append_data_to_csv
 async def fetch_company_data(session, company_name, start_date):
     end_date = (date.today())
     is_first_time = False
+    data_to_append = []
 
     if(start_date == None):
         start_date = end_date - timedelta(days=365 * 10)
@@ -39,11 +40,13 @@ async def fetch_company_data(session, company_name, start_date):
                         elif max_date == latest_date:
                             break
 
-                    append_data_to_csv(data, DATA_CSV)
+                    data_to_append.extend(data)
 
-                    print(f"Fetched data for {company_name} from {us_format_to_eu_format(from_date)} to {us_format_to_eu_format(to_date)}. Skipped rows with missing data.")
+                    # print(f"Fetched data for {company_name} from {us_format_to_eu_format(from_date)} to {us_format_to_eu_format(to_date)}. Skipped rows with missing data.")
             else:
                 print(f"Failed to fetch data for {company_name} from {from_date} to {to_date}.")
+    if data_to_append:
+        append_data_to_csv(data_to_append, DATA_CSV)
 
     return company_name, isoformat_to_eu_format(end_date.isoformat())
 
