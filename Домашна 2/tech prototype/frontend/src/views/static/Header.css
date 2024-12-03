@@ -1,0 +1,14 @@
+.navbar {
+    //background-color: #3F4461;
+    background-color: #2B3051;
+    color: white;
+    display: flex;
+    justify-content: start;
+
+}
+
+.navbar div {
+    margin: 0 50px;
+}
+
+
