@@ -8,12 +8,11 @@ from app.crawler.config import DATA_CSV, BASE_URL, HEADERS
 # Helper function for missing data fetch in Filter 3
 async def fetch_company_data(session, company_name, start_date):
     end_date = (date.today())
-    is_first_time = False
+    #end_date = (date.today() - timedelta(days=5))
     data_to_append = []
 
     if(start_date == None):
         start_date = end_date - timedelta(days=365 * 10)
-        is_first_time = True
     else:
         start_date = eu_format_to_datetime(start_date)
 
@@ -30,24 +29,18 @@ async def fetch_company_data(session, company_name, start_date):
                 data = scrape_data(page_content, company_name)
 
                 if data:
-                    if is_first_time == False:
-                        dates = [eu_format_to_isoformat(row["date"]) for row in data]
-                        max_date = max(dates)
-
-                        if max_date > latest_date:
-                            latest_date = max_date
-                        elif max_date == latest_date:
-                            break
-
                     data_to_append.extend(data)
-
                     # print(f"Fetched data for {company_name} from {us_format_to_eu_format(from_date)} to {us_format_to_eu_format(to_date)}. Skipped rows with missing data.")
             else:
                 print(f"Failed to fetch data for {company_name} from {from_date} to {to_date}.")
-    #if data_to_append:
-        #append_data_to_db(data_to_append)
 
-    return company_name, isoformat_to_eu_format(end_date.isoformat()), data_to_append
+    dates = [eu_format_to_isoformat(row["date"]) for row in data_to_append]
+    if dates:
+        max_date = max(dates)
+        latest_date = (date.fromisoformat(max_date) + timedelta(days=1)).isoformat()
+    else: latest_date = start_date.isoformat()
+
+    return company_name, isoformat_to_eu_format(latest_date), data_to_append
 
 
 # Helper function
