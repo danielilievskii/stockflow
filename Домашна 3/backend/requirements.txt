@@ -1,0 +1,7 @@
+beautifulsoup4
+pandas
+aiohttp
+uvicorn
+fastapi
+sqlalchemy
+psycopg2
