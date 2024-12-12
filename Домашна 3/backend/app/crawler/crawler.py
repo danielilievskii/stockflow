@@ -56,7 +56,7 @@ def scrape_data(page_content, company_name):
             "max_price": transform_commas_and_dots(cells[2].text),
             "min_price": transform_commas_and_dots(cells[3].text),
             "avg_price": transform_commas_and_dots(cells[4].text),
-            "percentage_change": cells[5].text.replace(".", ","),
+            "percentage_change": cells[5].text,
             "volume": cells[6].text,
             "total_turnover": transform_commas_and_append_00(cells[8].text)
         }
