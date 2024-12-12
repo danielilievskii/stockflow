@@ -1,0 +1,46 @@
+div {
+    font-size: 40px;
+    font-family: "Exo 2", serif;
+}
+
+h1 {
+    padding: 30px;
+    font-size: 70px;
+    font-weight: bold;
+    color: #2B3051;
+}
+body{
+    background-color: #f1f0f5;
+}
+
+.padding-left {
+    padding-left: 70px;
+}
+
+.col-md-4 {
+    padding: 0 !important;
+}
+
+.picture {
+    position: absolute !important;
+    bottom: 0;
+}
+
+.picture img {
+    max-width: 100%;
+}
+
+.text {
+    max-width: 1200px;
+    /*display: flex;*/
+    align-items: flex-start;
+    /*margin: auto;*/
+    text-align: start;
+    font-size: 33px;
+    line-height: 1.5;
+}
+.wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
