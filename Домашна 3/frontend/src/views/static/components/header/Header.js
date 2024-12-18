@@ -24,7 +24,10 @@ export const Header = () => {
                 </button>
 
                 <div className="collapse navbar-collapse" id="navbarScroll">
-                    <ul className="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll">
+                    <ul className="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll d-flex align-items-center">
+                        <li className="nav-item">
+                            <NavLink to="/" className="nav-link text-white small">Почетна</NavLink>
+                        </li>
                         <li className="nav-item">
                             <NavLink to="/technical" className="nav-link text-white small">Техничка анализа</NavLink>
                         </li>

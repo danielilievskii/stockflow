@@ -1,8 +1,8 @@
 import './App.css';
 import React, {useState} from "react";
 import {BrowserRouter, BrowserRouter as Router, Route, Routes} from "react-router-dom";
-import {Header} from "./views/static/Header";
-import {StockData} from "./views/stock_data/StockData";
+import {Header} from "./views/static/components/header/Header";
+import {StockData} from "./views/static/components/stock-data/StockData";
 import MainPage from "./views/static/pages/MainPage";
 import TechnicalAnalysis from "./views/static/components/technical/technicalAnalysis";
 import FundamentalAnalysis from "./views/static/components/fundamentalAnalysis/fundamentalAnalysis";

@@ -4,11 +4,11 @@ import {AnalysisButton} from "./AnalysisButton";
 
 export const HeroSectionMain = () => {
     return (
-        <div>
+        <div className="hero-section">
             <div className="container-fluid">
                 <div className="row d-flex justify-content-center align-items-center">
                     <div className="col-md-8 padding-left">
-                        <h1 className="text-center">"Прецизно анализирање за паметно инвестирање"</h1>
+                        <h1 className="text-center">Прецизно анализирање за паметно инвестирање</h1>
                         <p className="text-center">Оваа платформа е наменета за анализа на
                             финансиските податоци на македонските компании,
                             која Ви овозможува преглед на предвидени идни
