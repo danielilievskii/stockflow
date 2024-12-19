@@ -1,15 +1,13 @@
-.main-content {
+.analysis-section {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 50px 20px;
-    background-color: #f5f1fa;
     min-height: calc(100vh - 100px);
 }
 
-.analysis-section {
-    text-align: center;
+.analysis-section .analysis-container {
     max-width: 600px;
     width: 100%;
     background: #ffffff;
@@ -25,33 +23,8 @@ h2 {
     margin-bottom: 30px;
 }
 
-.analysis-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
 
-.form-group {
-    text-align: left;
-}
-
-.form-group label {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    display: block;
-    color: #2B3051;
-}
-
-.form-group select {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.submit-btn {
+.analysis-section .submit-btn {
     background-color: #4A90E2;
     width: 40%;
     align-items: center;
@@ -66,6 +39,6 @@ h2 {
     transition: all 0.3s ease;
 }
 
-.submit-btn:hover {
+.analysis-section .submit-btn:hover {
     background-color: #357ABD;
 }

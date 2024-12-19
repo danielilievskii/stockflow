@@ -1,47 +1,40 @@
-div {
-    font-size: 40px;
-    font-family: "Exo 2", serif;
-}
 
-h1 {
-    padding: 30px;
-    font-size: 70px;
-    font-weight: bold;
-    color: #2B3051;
-}
-body{
+.hero-section{
+    margin-top: 55px;
     background-color: #f1f0f5;
 }
 
-.padding-left {
+.hero-section h1 {
+    font-size: 70px;
+    font-weight: bold;
+    color: #2B3051;
+    margin-bottom: 40px;
+}
+
+.hero-section p {
+    font-size: 35px;
+}
+
+.hero-section .padding-left {
     padding-left: 70px;
 }
 
-.col-md-4 {
-    padding: 0 !important;
-}
-
-.picture {
-    position: absolute !important;
+/*TODO: fix image*/
+.hero-section .picture {
+    padding-top: 80px;
+    position: relative;
     bottom: 0;
+    right: 0;
 }
 
-.picture img {
+.hero-section .picture img {
     max-width: 100%;
 }
 
-.text {
-    max-width: 1200px;
-    /*display: flex;*/
-    align-items: flex-start;
-    /*margin: auto;*/
-    text-align: start;
-    font-size: 33px;
-    line-height: 1.5;
+.hero-section .col-md-4 {
+    padding: 0 !important;
 }
-.wrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
+
+
 
