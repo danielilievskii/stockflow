@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, Float, Integer, String
+from sqlalchemy import Column, Integer, String
 from app.database.connection import Base
 from pydantic import BaseModel
 
@@ -39,3 +39,4 @@ class LatestDate(Base):
 
     company_name = Column(String, primary_key=True, nullable=False)
     latest_date = Column(String, nullable=False)
+

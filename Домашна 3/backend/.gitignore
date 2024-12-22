@@ -1,0 +1,19 @@
+# Ignore .idea directory (JetBrains IDE)
+.idea/
+
+# Ignore Python bytecode files
+**/__pycache__/
+*.py[cod]
+
+# Ignore virtual environment directories
+env/
+venv/
+.env/
+.venv/
+
+# Ignore other common unwanted files
+*.log
+*.sqlite3
+
+# Ignore environment-specific files
+.env

@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 from app.database.connection import get_db
+
 from app.models.stock import StockData, LatestDate, StockDataResponse
 
 router = APIRouter()
@@ -14,3 +15,4 @@ def get_stocks_for_company(company_name: str, db: Session = Depends(get_db)):
 def get_stocks(db: Session = Depends(get_db)):
     companies = db.query(LatestDate).all()
     return [{"company_name": company.company_name} for company in companies]
+

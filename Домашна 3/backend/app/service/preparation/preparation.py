@@ -40,6 +40,7 @@ def preprocess_data(data: pd.DataFrame):
     data['min_price'] = data.apply(lambda row: row['avg_price'] if pd.isna(row['min_price']) else row['min_price'],
                                    axis=1)
 
+
     return data
 
 def get_stocks_as_dataframe(company_name: str, db: Session = next(get_db())):

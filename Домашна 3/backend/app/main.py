@@ -1,6 +1,7 @@
 from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-from app.controllers.stock_controller import router as stock_router
+from app.routers.stock_router import router as stock_router
+from app.routers.analysis_router import router as analysis_router
 from app.crawler.data_utils import reset_all_dates_to_specific_value
 from app.crawler.script import main_pipeline
 from app.database.connection import Base, engine
@@ -23,7 +24,7 @@ app.add_middleware(
 
 # Include router
 app.include_router(stock_router, prefix="/api")
-
+app.include_router(analysis_router, prefix="/api")
 
 @app.on_event("startup")
 async def on_startup():
