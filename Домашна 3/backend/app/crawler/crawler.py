@@ -4,7 +4,6 @@ from datetime import timedelta, date
 from app.crawler.helpers import (transform_commas_and_dots,split_date_range,
                      transform_commas_and_append_00, eu_format_to_isoformat, isoformat_to_eu_format, us_format_to_eu_format,eu_format_to_datetime, datetime_to_eu_format, us_to_datetime, us_to_iso_format)
 from app.crawler.config import DATA_CSV, BASE_URL, HEADERS
-
 # Helper function for missing data fetch in Filter 3
 async def fetch_company_data(session, company_name, start_date):
     end_date = (date.today())

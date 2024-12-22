@@ -24,8 +24,6 @@ def preprocess_data(data: pd.DataFrame):
         print("Skipping company due to missing 'closing_price' values.")
         return None
 
-    data = data.dropna(subset=['closing_price'])
-
     data = data.replace('', 'nan')
 
     columns_remove_comma = ["volume"]
