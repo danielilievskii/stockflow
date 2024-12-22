@@ -1,0 +1,68 @@
+.navbar {
+    background-color: #2B3051;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.navbar-nav .nav-link {
+    font-size: 1.6rem;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #f8f9fa;
+}
+
+.active {
+    color: #FFD700 !important;
+    background-color: #3C415C;
+    border-radius: 15px;
+}
+
+.logo-main {
+    max-height: 80px;
+    height: auto;
+    max-width: 100%;
+}
+
+.logo-secondary {
+    max-height: 45px;
+    height: auto;
+    max-width: 100%;
+}
+
+
+@media (max-width: 768px) {
+    .logo-main {
+        max-height: 60px;
+    }
+    .logo-secondary {
+        max-height: 35px;
+    }
+}
+
+@media (max-width: 576px) {
+    .logo-main {
+        max-height: 50px;
+    }
+    .logo-secondary {
+        max-height: 30px;
+    }
+}
+
+.navbar-toggler-custom {
+    border-color: white;
+}
+
+.navbar-toggler-custom .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+
+

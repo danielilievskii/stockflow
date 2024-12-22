@@ -1,0 +1,11 @@
+.hero-section .btn{
+    height: 90px;
+    width: 190px;
+    font-size: 22px;
+    font-family: "Exo 2", serif;
+    border-radius: 25px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+}

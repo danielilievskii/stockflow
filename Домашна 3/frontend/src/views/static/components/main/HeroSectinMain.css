@@ -1,0 +1,40 @@
+
+.hero-section{
+    margin-top: 55px;
+    background-color: #f1f0f5;
+}
+
+.hero-section h1 {
+    font-size: 70px;
+    font-weight: bold;
+    color: #2B3051;
+    margin-bottom: 40px;
+}
+
+.hero-section p {
+    font-size: 35px;
+}
+
+.hero-section .padding-left {
+    padding-left: 70px;
+}
+
+/*TODO: fix image*/
+.hero-section .picture {
+    padding-top: 80px;
+    position: relative;
+    bottom: 0;
+    right: 0;
+}
+
+.hero-section .picture img {
+    max-width: 100%;
+}
+
+.hero-section .col-md-4 {
+    padding: 0 !important;
+}
+
+
+
+

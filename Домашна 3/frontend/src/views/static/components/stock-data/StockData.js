@@ -74,7 +74,7 @@ export const StockData = () => {
 
     return (
         <div className="container mt-5">
-            <h1 className="text-center mb-4">Македонска Берза</h1>
+            <h2 className="text-center mb-4">Македонска Берза</h2>
             <form className="mb-4">
                 <div className="row align-items-center">
                     <div className="col-md-6">
