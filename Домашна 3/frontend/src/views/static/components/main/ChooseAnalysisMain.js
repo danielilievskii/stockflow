@@ -1,8 +1,8 @@
 import React from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import "./ChooseAnalysisMain.css"
-import TechnicalAnalysis from "../technical/technicalAnalysis";
-import technicalAnalysis from "../technical/technicalAnalysis";
+import TechnicalAnalysis from "../analysis/technicalAnalysis";
+import technicalAnalysis from "../analysis/technicalAnalysis";
 import {Link} from "react-router-dom";
 
 const AnalysisOptions = () => {

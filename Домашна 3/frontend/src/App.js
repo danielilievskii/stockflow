@@ -4,9 +4,9 @@ import {BrowserRouter, BrowserRouter as Router, Route, Routes} from "react-route
 import {Header} from "./views/static/components/header/Header";
 import {StockData} from "./views/static/components/stock-data/StockData";
 import MainPage from "./views/static/pages/MainPage";
-import TechnicalAnalysis from "./views/static/components/technical/technicalAnalysis";
-import FundamentalAnalysis from "./views/static/components/fundamentalAnalysis/fundamentalAnalysis";
-import ModelAnalysis from "./views/static/components/model/modelAnalysis";
+import TechnicalAnalysis from "./views/static/components/analysis/technicalAnalysis";
+import FundamentalAnalysis from "./views/static/components/analysis/fundamentalAnalysis";
+import ModelAnalysis from "./views/static/components/analysis/modelAnalysis";
 
 function App() {
   return (
