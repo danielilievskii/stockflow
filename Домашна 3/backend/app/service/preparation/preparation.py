@@ -1,14 +1,13 @@
 import pandas as pd
 from sqlalchemy.orm import Session
 from app.database.connection import get_db
-from app.models.stock import StockData, LatestDate, StockDataResponse
+from app.models.stock import StockData
 from datetime import datetime
 import numpy as np
 
 def transform_date(date_str: str) -> str:
     date_obj = datetime.strptime(date_str, "%d.%m.%Y")
     return date_obj.strftime("%Y-%m-%d")
-
 
 def preprocess_data(data: pd.DataFrame):
     data['date'] = data['date'].apply(transform_date)
@@ -21,7 +20,6 @@ def preprocess_data(data: pd.DataFrame):
     data = data.dropna(subset=['closing_price'])
 
     if data['closing_price'].isna().all():
-        print("Skipping company due to missing 'closing_price' values.")
         return None
 
     data = data.replace('', 'nan')

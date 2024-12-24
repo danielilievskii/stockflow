@@ -1,11 +1,14 @@
 from pydantic import BaseModel
+from typing import List
 
 class LSTMRequestDTO(BaseModel):
     company_name: str
     #date: str
 
+class Prediction(BaseModel):
+    date: str
+    price: float
+
 class LSTMResponseDTO(BaseModel):
     company_name: str
-    date: str
-    decision: str
-    price: float
+    predictions: List[Prediction]

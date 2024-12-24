@@ -4,6 +4,7 @@ from app.models.fundamental_dtos import FundamentalRequestDTO, FundamentalRespon
 from app.models.lstm_dtos import LSTMRequestDTO, LSTMResponseDTO
 
 from app.service.technical.technicalAnalysis import perform_technical_analysis
+from app.service.lstm.lstm_prediction import perform_lstm_analysis
 
 router = APIRouter()
 
@@ -26,7 +27,14 @@ def tech_analysis_post(fundamental_request: FundamentalRequestDTO):
 @router.post("/lstm-analysis", response_model=LSTMResponseDTO)
 def lstm_analysis_post(lstm_request: LSTMRequestDTO):
     try:
-        # Default values for testing purposes
-        return {"company_name": lstm_request.company_name, "date": lstm_request.date, "decision": "Buy", "price": 3000}
+        company_predictions = perform_lstm_analysis(lstm_request.company_name, 3)
+        result = {
+            "company_name": lstm_request.company_name,
+            "predictions": [
+                {"date": prediction["date"], "price": prediction["price"]}
+                for prediction in company_predictions
+            ]
+        }
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
