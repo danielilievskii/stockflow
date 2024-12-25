@@ -6,6 +6,7 @@ from app.crawler.data_utils import reset_all_dates_to_specific_value
 from app.crawler.script import main_pipeline
 from app.database.connection import Base, engine
 import asyncio
+from app.crawler_news.script import news_pipeline
 
 app = FastAPI()
 
@@ -31,6 +32,8 @@ async def on_startup():
     Base.metadata.create_all(bind=engine)
     # reset_all_dates_to_specific_value("28.11.2024")
     await main_pipeline()
+    await news_pipeline()
+
 
 @app.get("/")
 async def read_root():
