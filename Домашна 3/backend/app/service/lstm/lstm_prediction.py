@@ -146,22 +146,6 @@ def perform_lstm_analysis(company_name, steps, csv_file: str = "future_stock_pre
 
     future_predictions = predict(model, last_sequence, steps, scaler, min_price, max_price)
 
-    # today_date = datetime.strptime(today, "%Y-%m-%d")
-    # predicted_dates = [(today_date + timedelta(days=i + 1)).strftime("%Y-%m-%d") for i in range(steps)]
-
-    # new_row = {
-    #     "company": company_name,
-    #     "last_prediction": today,
-    #     **{date: "" for date in predicted_dates}
-    # }
-    # new_row.update({date: price for date, price in zip(predicted_dates, future_predictions.flatten())})
-
-    # company_predictions = {
-    #     "company": company_name,
-    #     "last_prediction": today,
-    #     **{date: price for date, price in zip(predicted_dates, future_predictions.flatten())}
-    # }
-
     company_predictions = {
         "company": company_name,
         "last_prediction": today,
@@ -181,6 +165,5 @@ def perform_lstm_analysis(company_name, steps, csv_file: str = "future_stock_pre
     predictions_df = pd.concat([predictions_df, pd.DataFrame([company_predictions])], ignore_index=True)
 
     predictions_df.to_csv(csv_file, index=False)
-    # predictions_df.to_csv(csv_file, mode='a', index=False, header=not pd.io.common.file_exists(csv_file))
 
     return map_predictions_to_dates(company_predictions)

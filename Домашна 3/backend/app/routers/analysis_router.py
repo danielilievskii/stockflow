@@ -4,6 +4,7 @@ from app.models.fundamental_dtos import FundamentalRequestDTO, FundamentalRespon
 from app.models.lstm_dtos import LSTMRequestDTO, LSTMResponseDTO
 
 from app.service.technical.technicalAnalysis import perform_technical_analysis
+from app.service.fundamental.fundamentalAnalysis import perform_fundamental_analysis
 from app.service.lstm.lstm_prediction import perform_lstm_analysis
 
 router = APIRouter()
@@ -19,8 +20,8 @@ def tech_analysis_post(tech_request: TechAnalysisRequestDTO):
 @router.post("/fundamental-analysis", response_model=FundamentalResponseDTO)
 def tech_analysis_post(fundamental_request: FundamentalRequestDTO):
     try:
-        # Default values for testing purposes
-        return {"company_name": fundamental_request.company_name, "decision": "Buy"}
+        decision = perform_fundamental_analysis(fundamental_request.company_name)
+        return {"company_name": fundamental_request.company_name, "decision": decision}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
