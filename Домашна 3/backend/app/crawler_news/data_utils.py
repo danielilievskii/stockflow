@@ -19,7 +19,7 @@ def save_latest_dates_to_db(company_latest_dates: dict):
 
         db.commit()
 
-    print("Latest dates saved to the database.")
+    print("Filter 3 - News Crawler: Latest dates were saved to the database.")
 
 def load_latest_dates_from_db() -> dict:
     with SessionLocal() as db:
@@ -31,7 +31,7 @@ def append_data_to_db(data: list):
         for entry in data:
             db.add(CompanyNewsData(**entry))
         db.commit()
-    print("Data appended to the database.")
+    print("Filter 3 - News Crawler: News were appended to the database.")
 
 def reset_all_dates_to_specific_value(date_value: str):
     with SessionLocal() as db:

@@ -10,7 +10,7 @@ async def main_pipeline():
     filter_3_fetch_missing_data(latest_dates)
 
     end_time = time.time()
-    print(f"Pipeline completed in {end_time - start_time:.2f} seconds")
+    print(f"Stock Data crawling completed in {end_time - start_time:.2f} seconds")
 
 
 if __name__ == "__main__":

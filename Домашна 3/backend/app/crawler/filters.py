@@ -19,7 +19,7 @@ async def filter_1_fetch_companies():
             companies = [option.text for option in soup.select("select#Code option")
                          if not any(char.isdigit() for char in option.text)]
 
-    print("Filter 1: Fetched companies.")
+    print("Stock Data Crawler - Filter 1: Fetched companies.")
     return companies
 
 
@@ -27,10 +27,10 @@ async def filter_1_fetch_companies():
 async def filter_2_initialize_dates(companies):
     company_latest_dates = load_latest_dates_from_db()
     if not company_latest_dates:
-        print("Filter 2: No latest dates found in DB. Initializing with None.")
+        print("Stock Data Crawler - Filter 2: No latest dates found in DB. Initializing with None.")
         company_latest_dates = {company: None for company in companies}
     else:
-        print("Filter 2: Loaded latest dates from DB.")
+        print("Stock Data Crawler - Filter 2: Loaded latest dates from DB.")
     return company_latest_dates
 
 
@@ -59,7 +59,7 @@ def filter_3_fetch_missing_data(company_latest_dates):
 
         #all_latest_dates = {k: v for d in results for k, v in d.items()}
         #save_latest_dates_to_db(all_latest_dates)
-        print("Filter 3: Completed fetching and updating data. Skipped rows with missing data.")
+        print("Stock Data Crawler - Filter 3: Completed fetching and updating data.")
 
 def fetch_data_for_chunk(args):
     chunk, _ = args
