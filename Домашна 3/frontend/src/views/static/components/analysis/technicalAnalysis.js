@@ -5,18 +5,21 @@ import Result from "./result/Result";
 import useFetchCompanies from "../../../../hooks/useFetchCompanies";
 import useResponseHandler from "../../../../hooks/useResponseHandler";
 import AnalysisForm from "./form/Form";
+import {useNavigate} from "react-router-dom";
+import {formatClosingPrice, formatDate, sortStocksByDateAscending} from "../../../../utils/stockUtils";
 
 const TechnicalAnalysis = () => {
-
-    const [selectedCompany, setSelectedCompany] = useState("");
-    const [selectedPeriod, setPeriod] = useState("");
-
-    const [companyName, setCompanyName] = useState("");
-    const [decision, setDecision] = useState("");
-
+   const navigate = useNavigate();
     const { companies } = useFetchCompanies();
     const { response, handleResponse, handleError } = useResponseHandler();
 
+    const [selectedCompany, setSelectedCompany] = useState("");
+
+    const [selectedPeriod, setPeriod] = useState("");
+    const [companyName, setCompanyName] = useState("");
+    const [historicalData, setHistoricalData] = useState([]);
+    const [decision, setDecision] = useState("");
+    const [messageDecision, setMessageDecision] = useState("");
     const handleTechAnalysisSubmit = () => {
         if (!selectedCompany || !selectedPeriod) {
             handleError({ message: "Please select both a company and a time period." });
@@ -28,11 +31,37 @@ const TechnicalAnalysis = () => {
                 handleResponse(result, (data) => {
                     setCompanyName(data.company_name);
                     setDecision(data.decision);
+                    console.log(decision)
+                    console.log(messageDecision)
                 }, { message: "Script executed successfully!" });
             })
             .catch((error) => {
                 handleError(error);
             });
+
+        StockActions.fetchCompanyData(selectedCompany)
+            .then((result) => {
+                handleResponse(result, (data) => {
+                    setCompanyName(data.company_name);
+                    const historicalData = data.map(stock => ({
+                        date: formatDate(stock.date),
+                        closing_price: formatClosingPrice(stock.closing_price)
+                    }));
+                    setHistoricalData(sortStocksByDateAscending(historicalData));
+
+
+                }, { message: "Script executed successfully!" });
+            })
+            .catch((error) => {
+                handleError(error);
+            });
+    };
+
+
+    const handleNavigateToResult = () => {
+        navigate('/chart-data', {
+            state: { historicalData }
+        });
     };
 
     return (
@@ -50,10 +79,18 @@ const TechnicalAnalysis = () => {
             />
 
             {decision && (
-                <Result decision={decision} companyName={companyName}/>
+                <>
+                    <Result decision={decision} message={AnalysisActions.getDecisionMessage(decision)} companyName={companyName}/>
+
+                    <div className="text-center mt-2">
+                        <button onClick={handleNavigateToResult} className="btn btn-warning">
+                            Погледни ценовен график
+                        </button>
+                    </div>
+                </>
             )}
 
-            {response && <p className="text-center text-info">{response}</p>}
+            {/*{response && <p className="text-center text-info">{response}</p>}*/}
         </main>
     );
 };

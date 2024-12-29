@@ -2,7 +2,7 @@ import {AnalysisActions} from "../../../../../actions/analysisActions";
 import React from "react";
 
 const Result = (props) => {
-    const { decision, companyName } = props;
+    const { decision, message, companyName } = props;
 
     return (
         <section className="result-container p-4 mb-3 bg-white rounded shadow-sm">
@@ -24,7 +24,7 @@ const Result = (props) => {
                 </div>
                 <hr />
                 <div className="mt-2 text-center" style={{color: '#2B3051'}}>
-                    <h5 className="fw-bold">{AnalysisActions.getDecisionMessage(decision)}</h5>
+                    <h5 className="fw-bold">{message}</h5>
                 </div>
             </div>
         </section>

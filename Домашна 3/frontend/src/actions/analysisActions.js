@@ -25,6 +25,54 @@ export const AnalysisActions = {
             });
     },
 
+    fetchFundamentalAnalysisResult: (companyName) => {
+        return axiosInstance
+            .post(
+                "/fundamental-analysis",
+                { company_name: companyName},
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+            .then((response) => {
+                return { success: true, data: response.data };
+            })
+            .catch((error) => {
+                return {
+                    success: false,
+                    message: error.response
+                        ? `Error: ${error.response.data.detail}`
+                        : "Error communicating with server",
+                };
+            });
+    },
+
+    fetchPriceAnalysisResult: (companyName) => {
+        return axiosInstance
+            .post(
+                "/lstm-analysis",
+                { company_name: companyName},
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+            .then((response) => {
+                return { success: true, data: response.data };
+            })
+            .catch((error) => {
+                return {
+                    success: false,
+                    message: error.response
+                        ? `Error: ${error.response.data.detail}`
+                        : "Error communicating with server",
+                };
+            });
+    },
+
     getDecisionMessage: (decision) => {
         switch (decision) {
             case "Buy":

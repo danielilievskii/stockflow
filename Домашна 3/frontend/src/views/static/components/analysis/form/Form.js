@@ -5,7 +5,8 @@ const AnalysisForm = ({
                           setPeriod,
                           companies,
                           showPeriodField,
-                          handleSubmit
+                          handleSubmit,
+                            isLoading
                       }) => {
     return (
         <section className="analysis-container p-4 mb-5 bg-white rounded-3 shadow-sm">
@@ -49,6 +50,7 @@ const AnalysisForm = ({
 
                 <div className="d-flex justify-content-center">
                     <button
+                        disabled={isLoading}
                         type="button"
                         className="btn submit-btn"
                         onClick={handleSubmit}
