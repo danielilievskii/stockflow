@@ -162,7 +162,7 @@ def aggregate_signals_for_decision(data, timeframe):
             Momentum_weight * data[f'Momentum-Signal-{suffix}']
     )
 
-    threshold = 7
+    threshold = 4
     data[f'FinalDecision-{suffix}'] = np.where(
         data[f'CombinedSignal-{suffix}'] > threshold, 'Buy',
         np.where(data[f'CombinedSignal-{suffix}'] < -threshold, 'Sell', 'Hold')
