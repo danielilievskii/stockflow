@@ -1,0 +1,48 @@
+.analysis-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*justify-content: center;*/
+    padding: 50px 20px;
+    min-height: calc(100vh - 100px);
+}
+
+.result-container {
+    max-width: 700px;
+}
+
+
+.analysis-section .analysis-container {
+    max-width: 700px;
+    width: 100%;
+    /*background: #ffffff;*/
+    /*border-radius: 10px;*/
+    /*box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);*/
+    /*padding: 30px;*/
+}
+
+h2 {
+    font-size: 50px;
+    font-weight: bold;
+    color: #2B3051;
+    margin-bottom: 30px;
+}
+
+
+.analysis-section .submit-btn {
+    background-color: rgba(102,114,188,255);
+    width: 40%;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.analysis-section .submit-btn:hover {
+    background-color: rgba(77, 85, 150, 255);
+}
