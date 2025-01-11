@@ -4,189 +4,138 @@ import pandas_ta as ta
 
 from service.preprocess.stocks_preprocess import get_stocks_as_dataframe
 
-window = 5
-def SMA(data, period=30, column='closing_price'):
-    return data[column].rolling(window=period).mean()
-def EMA(data, window, column='closing_price'):
-    return data[column].ewm(span=window, adjust=False).mean()
+# Constants
+MOVING_AVERAGES_PERIODS = [1, 7, 30, 60]
+OSCILLATORS_PERIODS = [1, 7, 30]
+THRESHOLDS = {
+    "RSI": {"overbought": 70, "oversold": 30},
+    "CCI": {"overbought": 100, "oversold": -100},
+    "Decision": 4,
+}
+WEIGHTS = {
+    "MA": 1,
+    "RSI": 1.5,
+    "MACD": 1.2,
+    "CCI": 0.8,
+    "Momentum": 1.0,
+}
 
-def WMA(data, window, column='closing_price'):
-    weights = np.arange(1, window + 1)
-    return data[column].rolling(window=window).apply(lambda prices:
-                                                     np.dot(prices, weights) / weights.sum(),
-                                                     raw=True)
-def HMA(data, window, column='closing_price'):
-    half_length = window // 2
-    sqrt_length = int(window ** 0.5)
-    wma_half = WMA(data, half_length, column=column)
-    wma_full = WMA(data, window, column=column)
-    diff = 2 * wma_half - wma_full
-    return WMA(pd.DataFrame({column: diff}), sqrt_length, column=column)
 
-def VWMA(data, window):
-    price = data['closing_price']
-    volume = data['volume']
-    return (
-            (price * volume).rolling(window=window).sum() /
-            volume.rolling(window=window).sum()
-    )
+# Helper functions for Moving Averages
+def calculate_moving_average(data, period, method="SMA", column="closing_price"):
+    if method == "SMA":
+        return data[column].rolling(window=period).mean()
+    elif method == "EMA":
+        return data[column].ewm(span=period, adjust=False).mean()
+    elif method == "WMA":
+        weights = np.arange(1, period + 1)
+        return data[column].rolling(window=period).apply(
+            lambda prices: np.dot(prices, weights) / weights.sum(), raw=True
+        )
+    elif method == "HMA":
+        half_length = period // 2
+        sqrt_length = int(period ** 0.5)
+        wma_half = calculate_moving_average(data, half_length, method="WMA", column=column)
+        wma_full = calculate_moving_average(data, period, method="WMA", column=column)
+        diff = 2 * wma_half - wma_full
+        return calculate_moving_average(pd.DataFrame({column: diff}), sqrt_length, method="WMA", column=column)
+    elif method == "VWMA":
+        price = data[column]
+        volume = data['volume']
+        return (
+                (price * volume).rolling(window=period).sum() /
+                volume.rolling(window=period).sum()
+        )
+    else:
+        raise ValueError(f"Unknown method: {method}")
 
+
+# Technical Indicator Calculation
 def compute_technical_indicators(data):
-
     # Moving Averages
-    periods = [1, 7, 30, 60]
-    for period in periods:
-        data[f'SMA-{period}'] = SMA(data, period)
-        data[f'EMA-{period}'] = EMA(data, period)
-        data[f'WMA-{period}'] = WMA(data, period)
-        data[f'HMA-{period}'] = HMA(data, period)
-        data[f'VWMA-{period}'] = VWMA(data, period)
+    ma_methods = ["SMA", "EMA", "WMA", "HMA", "VWMA"]
+    for method in ma_methods:
+        for period in MOVING_AVERAGES_PERIODS:
+            data[f'{method}-{period}'] = calculate_moving_average(data, period, method=method)
 
     # Oscillators
-    # RSI
-    data['RSI-1'] = ta.rsi(data['closing_price'], length=2)
-    data['RSI-7'] = ta.rsi(data['closing_price'], length=7)
-    data['RSI-30'] = ta.rsi(data['closing_price'], length=30)
+    for period in OSCILLATORS_PERIODS:
+        data[f'RSI-{period}'] = ta.rsi(data['closing_price'], length=max(2, period))
+        data[f'CCI-{period}'] = ta.cci(data['max_price'], data['min_price'], data['closing_price'],
+                                       length=max(2, period))
+        data[f'Momentum-{period}'] = ta.mom(data['closing_price'], length=period)
 
     # MACD
-    data['MACD-1'], data['Signal_1'], _ = ta.macd(data['closing_price'], fast=5, slow=12, signal=9)
-    data['MACD-7'], data['Signal_7'], _ = ta.macd(data['closing_price'], fast=12, slow=26, signal=9)
-    data['MACD-30'], data['Signal_30'], _ = ta.macd(data['closing_price'], fast=26, slow=50, signal=9)
-
-    # CCI
-    data['CCI-1'] = ta.cci(data['max_price'], data['min_price'], data['closing_price'], length=2)
-    data['CCI-7'] = ta.cci(data['max_price'], data['min_price'], data['closing_price'], length=7)
-    data['CCI-30'] = ta.cci(data['max_price'], data['min_price'], data['closing_price'], length=30)
-
-    # Stochastic
-    # data['Stochastic-%K-1'] = ta.stoch(
-    #     high=data['max_price'],
-    #     low=data['min_price'],
-    #     close=data['closing_price'],
-    #     k=1,
-    #     d=1
-    # )
-    #
-    # data['Stochastic-%K-7'] = ta.stoch(
-    #     high=data['max_price'],
-    #     low=data['min_price'],
-    #     close=data['closing_price'],
-    #     k=7,
-    #     d=3
-    # )
-    #
-    # data['Stochastic-%K-30'] = ta.stoch(
-    #     high=data['max_price'],
-    #     low=data['min_price'],
-    #     close=data['closing_price'],
-    #     k=30,
-    #     d=3
-    # )
-
-    # Momentum
-    data['Momentum-1'] = ta.mom(data['closing_price'], length=1)
-    data['Momentum-7'] = ta.mom(data['closing_price'], length=7)
-    data['Momentum-30'] = ta.mom(data['closing_price'], length=30)
+    macd_configs = [
+        (1, 5, 12, 9),  # period, fast, slow, signal
+        (7, 12, 26, 9),
+        (30, 26, 50, 9)
+    ]
+    for period, fast, slow, signal in macd_configs:
+        data[f'MACD-{period}'], data[f'Signal_{period}'], _ = ta.macd(data['closing_price'], fast=fast, slow=slow,
+                                                                      signal=signal)
 
     return data
+
 
 def generate_moving_average_signals(data):
-    # Simple Moving Average Signals
-    data['SignalSMA1'] = np.where(data['SMA-1'] > data['SMA-7'], 1, 0)
-    data['SignalSMA7'] = np.where(data['SMA-7'] > data['SMA-30'], 1, 0)
-    data['SignalSMA30'] = np.where(data['SMA-30'] > data['SMA-60'], 1, 0)
+    ma_types = ['SMA', 'EMA', 'WMA', 'HMA', 'VWMA']
 
-    # Exponential Moving Average Signals
-    data['SignalEMA1'] = np.where(data['EMA-1'] > data['EMA-7'], 1, 0)
-    data['SignalEMA7'] = np.where(data['EMA-7'] > data['EMA-30'], 1, 0)
-    data['SignalEMA30'] = np.where(data['EMA-30'] > data['EMA-60'], 1, 0)
-
-    # Weighted Moving Average Signals
-    data['SignalWMA1'] = np.where(data['WMA-1'] > data['WMA-7'], 1, 0)
-    data['SignalWMA7'] = np.where(data['WMA-7'] > data['WMA-30'], 1, 0)
-    data['SignalWMA30'] = np.where(data['WMA-30'] > data['WMA-60'], 1, 0)
-
-    # Hull Moving Average Signals
-    data['SignalHMA1'] = np.where(data['HMA-1'] > data['HMA-7'], 1, 0)
-    data['SignalHMA7'] = np.where(data['HMA-7'] > data['HMA-30'], 1, 0)
-    data['SignalHMA30'] = np.where(data['HMA-30'] > data['HMA-60'], 1, 0)
-
-    # Volume Weighted Moving Average Signals
-    data['SignalVWMA1'] = np.where(data['VWMA-1'] > data['VWMA-7'], 1, 0)
-    data['SignalVWMA7'] = np.where(data['VWMA-7'] > data['VWMA-30'], 1, 0)
-    data['SignalVWMA30'] = np.where(data['VWMA-30'] > data['VWMA-60'], 1, 0)
+    for ma_type in ma_types:
+        for i in range(len(MOVING_AVERAGES_PERIODS) - 1):
+            current_period = MOVING_AVERAGES_PERIODS[i]
+            next_period = MOVING_AVERAGES_PERIODS[i + 1]
+            data[f'Signal{ma_type}{current_period}'] = np.where(
+                data[f'{ma_type}-{current_period}'] > data[f'{ma_type}-{next_period}'], 1, 0
+            )
 
 
-def generate_oscillator_signals(data, timeframe):
-    suffix = str(timeframe)
+def generate_oscillator_signals(data, period):
+    suffix = str(period)
 
-    # RSI Signal
     data[f'RSI-Signal-{suffix}'] = np.where(
-        data[f'RSI-{timeframe}'] > 70, -1,
-        np.where(data[f'RSI-{timeframe}'] < 30, 1, 0)
+        data[f'RSI-{period}'] > THRESHOLDS["RSI"]["overbought"], -1,
+        np.where(data[f'RSI-{period}'] < THRESHOLDS["RSI"]["oversold"], 1, 0)
     )
-
-    # MACD Signal
     data[f'MACD-Signal-{suffix}'] = np.where(
-        data[f'MACD-{timeframe}'] > data[f'Signal_{timeframe}'], 1, -1
+        data[f'MACD-{period}'] > data[f'Signal_{period}'], 1, -1
     )
-
-    # CCI Signal
     data[f'CCI-Signal-{suffix}'] = np.where(
-        data[f'CCI-{timeframe}'] > 100, -1,
-        np.where(data[f'CCI-{timeframe}'] < -100, 1, 0)
+        data[f'CCI-{period}'] > THRESHOLDS["CCI"]["overbought"], -1,
+        np.where(data[f'CCI-{period}'] < -THRESHOLDS["CCI"]["oversold"], 1, 0)
     )
-
-    # Stochastic Signal
-    # data[f'Stochastic-Signal-{suffix}'] = np.where(
-    #     data[f'Stochastic-%K-{timeframe}'] > 80, -1,
-    #     np.where(data[f'Stochastic-%K-{timeframe}'] < 20, 1, 0)
-    # )
-
-    # Momentum Signal
     data[f'Momentum-Signal-{suffix}'] = np.where(
-        data[f'Momentum-{timeframe}'] > 0, 1, -1
+        data[f'Momentum-{period}'] > 0, 1, -1
     )
 
     return data
 
-def aggregate_signals_for_decision(data, timeframe):
-    suffix = str(timeframe)
-    data[f'MA-Signal-{suffix}'] = (
-            data[f'SignalSMA{timeframe}'] +
-            data[f'SignalEMA{timeframe}'] +
-            data[f'SignalWMA{timeframe}'] +
-            data[f'SignalHMA{timeframe}'] +
-            data[f'SignalVWMA{timeframe}']
-    )
 
-    MA_weight = 1
-    RSI_weight = 1.5
-    MACD_weight = 1.2
-    CCI_weight = 0.8
-    # Stochastic_weight = 1.0
-    Momentum_weight = 1.0
+def aggregate_signals_for_decision(data, period):
+    suffix = str(period)
+    data[f'MA-Signal-{suffix}'] = sum(
+        data[f'Signal{ma_type}{period}'] for ma_type in ['SMA', 'EMA', 'WMA', 'HMA', 'VWMA']
+    )
 
     data[f'CombinedSignal-{suffix}'] = (
-            MA_weight * data[f'MA-Signal-{suffix}'] +
-            RSI_weight * data[f'RSI-Signal-{suffix}'] +
-            MACD_weight * data[f'MACD-Signal-{suffix}'] +
-            CCI_weight * data[f'CCI-Signal-{suffix}'] +
-            # Stochastic_weight * data[f'Stochastic-Signal-{suffix}'] +
-            Momentum_weight * data[f'Momentum-Signal-{suffix}']
+            WEIGHTS['MA'] * data[f'MA-Signal-{suffix}'] +
+            WEIGHTS['RSI'] * data[f'RSI-Signal-{suffix}'] +
+            WEIGHTS['MACD'] * data[f'MACD-Signal-{suffix}'] +
+            WEIGHTS['CCI'] * data[f'CCI-Signal-{suffix}'] +
+            WEIGHTS['Momentum'] * data[f'Momentum-Signal-{suffix}']
     )
 
-    threshold = 4
     data[f'FinalDecision-{suffix}'] = np.where(
-        data[f'CombinedSignal-{suffix}'] > threshold, 'Buy',
-        np.where(data[f'CombinedSignal-{suffix}'] < -threshold, 'Sell', 'Hold')
+        data[f'CombinedSignal-{suffix}'] > THRESHOLDS['Decision'], 'Buy',
+        np.where(data[f'CombinedSignal-{suffix}'] < -THRESHOLDS['Decision'], 'Sell', 'Hold')
     )
+
 
 def perform_technical_analysis(company, period):
     try:
         data = get_stocks_as_dataframe(company)
 
-        if len(data) < 60:
+        if len(data) < max(MOVING_AVERAGES_PERIODS):
             return "Error: Not enough data"
 
         compute_technical_indicators(data)
@@ -197,7 +146,6 @@ def perform_technical_analysis(company, period):
         last_decisions = data[f'FinalDecision-{period}'].tail(period)
         buy_count = (last_decisions == 'Buy').sum()
         sell_count = (last_decisions == 'Sell').sum()
-        hold_count = (last_decisions == 'Hold').sum()
 
         if buy_count > sell_count:
             return 'Buy'

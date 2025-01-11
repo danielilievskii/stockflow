@@ -1,41 +1,23 @@
-import pandas as pd
 import torch
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import pandas as pd
 from collections import Counter
 from sqlalchemy.orm import Session
 from database.connection import get_db
 from models.news import CompanyNewsData
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+from service.preprocess.news_preprocess import get_news_as_dataframe
+
+FINBERT_MODEL_NAME = "ProsusAI/finbert"
 
 
-def get_company_news_as_dataframe(company_name: str, db: Session = next(get_db())) -> pd.DataFrame:
-
-    try:
-        news = (
-            db.query(CompanyNewsData)
-            .filter(CompanyNewsData.company == company_name)
-            .filter(
-                (CompanyNewsData.sentiment == None) |
-                (CompanyNewsData.sentiment == "")
-            )
-            .all()
-        )
-        news_dicts = [article.__dict__ for article in news]
-        for article in news_dicts:
-            article.pop('_sa_instance_state', None)
-
-        df = pd.DataFrame(news_dicts)
-        print(f"Found {len(news)} news articles")
-
-        return df
-    except Exception as e:
-        print(f"Error querying news data: {e}")
-        return pd.DataFrame()
+def initialize_sentiment_model():
+    tokenizer = AutoTokenizer.from_pretrained(FINBERT_MODEL_NAME)
+    model = AutoModelForSequenceClassification.from_pretrained(FINBERT_MODEL_NAME)
+    return tokenizer, model
 
 
-def analyze_sentiment(text):
-    tokenizer = AutoTokenizer.from_pretrained("ProsusAI/finbert")
-    model = AutoModelForSequenceClassification.from_pretrained("ProsusAI/finbert")
-
+def analyze_sentiment(text, tokenizer, model):
     inputs = tokenizer(
         text,
         max_length=512,
@@ -45,18 +27,19 @@ def analyze_sentiment(text):
     )
     with torch.no_grad():
         outputs = model(**inputs)
-        logits = outputs.logits
-        prediction = torch.argmax(logits, axis=-1)
+        prediction = torch.argmax(outputs.logits, axis=-1)
+    return model.config.id2label[prediction.item()]
 
-    finbert_label = model.config.id2label[prediction.item()]
-    return finbert_label
 
-def update_sentiment_in_dataframe(df):
+def update_sentiment_in_dataframe(df, tokenizer, model):
     sentiments = []
     for index, row in df.iterrows():
         try:
-            sentiment = analyze_sentiment(row['content'])
-            sentiments.append(sentiment)
+            if pd.isna(row['sentiment']) or row['sentiment'] == "":
+                sentiment = analyze_sentiment(row['content'], tokenizer, model)
+                sentiments.append(sentiment)
+            else:
+                sentiments.append(row['sentiment'])
         except Exception as e:
             print(f"Error analyzing row ID {row['id']}: {e}")
             sentiments.append(None)
@@ -64,26 +47,23 @@ def update_sentiment_in_dataframe(df):
     return df
 
 
-def get_last_7_dates_sentiments(company_name: str, db: Session) -> list:
-    sentiment_data = db.query(CompanyNewsData.date, CompanyNewsData.sentiment).filter(
-        CompanyNewsData.company == company_name,
-        CompanyNewsData.sentiment.isnot(None)
-    ).order_by(CompanyNewsData.date.desc()).all()
+def update_database_with_sentiments(news_df, db: Session = next(get_db())):
+    for index, row in news_df.iterrows():
+        db.query(CompanyNewsData).filter(CompanyNewsData.id == row['id']).update(
+            {"sentiment": row['sentiment']}
+        )
+    db.commit()
 
-    distinct_dates = []
-    sentiments = []
-    for date, sentiment in sentiment_data:
-        distinct_dates.append(date)
-        sentiments.append(sentiment)
-        if len(distinct_dates) >= 7:
-            break
 
+def get_last_sentiments(news_df, days=7):
+    sorted_news_df = news_df.sort_values(by='date', ascending=False)
+    last_days = sorted_news_df.head(days)
+    sentiments = last_days['sentiment'].tolist()
     return sentiments
 
 
-def predict_action(sentiments: list) -> str:
+def predict_action_from_sentiments(sentiments):
     sentiment_counts = Counter(sentiments)
-
     positive_count = sentiment_counts.get("positive", 0)
     negative_count = sentiment_counts.get("negative", 0)
     neutral_count = sentiment_counts.get("neutral", 0)
@@ -97,19 +77,14 @@ def predict_action(sentiments: list) -> str:
 
 
 def perform_fundamental_analysis(company_name):
-    db_session = next(get_db())
+    tokenizer, model = initialize_sentiment_model()
 
-    news_df = get_company_news_as_dataframe(company_name, db=db_session)
+    news_df = get_news_as_dataframe(company_name)
+    news_df = update_sentiment_in_dataframe(news_df, tokenizer, model)
 
-    news_df = update_sentiment_in_dataframe(news_df)
+    update_database_with_sentiments(news_df)
 
-    for index, row in news_df.iterrows():
-        db_session.query(CompanyNewsData).filter(CompanyNewsData.id == row['id']).update(
-            {"sentiment": row['sentiment']}
-        )
-    db_session.commit()
+    last_sentiments = get_last_sentiments(news_df)
+    recommended_action = predict_action_from_sentiments(last_sentiments)
 
-    sentiments_last_7_dates = get_last_7_dates_sentiments(company_name, db=db_session)
-    action = predict_action(sentiments_last_7_dates)
-
-    return action
+    return recommended_action

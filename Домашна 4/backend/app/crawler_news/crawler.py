@@ -26,7 +26,7 @@ async def fetch_company_news_data(session, company_name, start_date):
             page_content = await response.text()
             news_date_link = extract_news_links(page_content)
         else:
-            print(f"News Crawler - Filter 3: Failed to fetch data. Status code: {response.status_code}")
+            print(f"News Crawler - Filter 3: Failed to fetch data. Status code: {response.status}")
             return company_name, None, None
 
     if not news_date_link:
