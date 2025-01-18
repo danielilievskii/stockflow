@@ -132,7 +132,7 @@ def extract_redirect_url(text):
         ('https://seinet.com.mk/document/', 'https://www.seinet.com.mk/document/')))
 
     return link['href'] if link else None
-def translate_mk_to_en(text):
+async def translate_mk_to_en(text):
     if text is not None:
         if isinstance(text, str) and text.strip():
             if "..." in text:
@@ -140,7 +140,7 @@ def translate_mk_to_en(text):
 
             normalized_text = normalize_cyrillic(text)
             try:
-                translator = TranslatorSingleton().get_translator()
+                translator = TranslatorSingleton().get_instance()
                 max_length = 5000
                 if len(normalized_text) > max_length:
                     parts = [normalized_text[i:i + max_length] for i in range(0, len(normalized_text), max_length)]
