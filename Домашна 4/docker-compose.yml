@@ -1,8 +1,8 @@
 version: '3.8'
 services:
-  postgres:
+  database:
     image: postgres
-    container_name: postgres_db
+    container_name: database
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -12,6 +12,96 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend/app
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "9090:8080"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@database:5432/stockflow_db
+    depends_on:
+      - database
+      - stocks_scraper
+      - news_scraper
+
+  technical-analysis:
+    build:
+      context: .
+      dockerfile: backend/technical-analysis-service/Dockerfile 
+    container_name: technical-analysis-service
+    ports:
+      - "9091:8080"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@database:5432/stockflow_db
+    depends_on:
+      - backend
+    volumes:
+      - ./backend/util/dist:/app/dist
+  
+  fundamental-analysis:
+    build:
+      context: ./backend/fundamental-analysis-service
+      dockerfile: Dockerfile
+    container_name: fundamental-analysis-service
+    ports:
+      - "9092:8080"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@database:5432/stockflow_db
+    depends_on:
+      - backend
+
+  lstm-analysis:
+    build:
+      context: .
+      dockerfile: backend/lstm-analysis-service/Dockerfile
+    container_name: lstm-analysis-service
+    ports:
+      - "9093:8080"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@database:5432/stockflow_db
+    depends_on:
+      - backend
+    volumes:
+      - ./backend/util/dist:/app/dist
+
+  stocks_scraper:
+    build:
+      context: ./backend/stocks-scraper-service
+      dockerfile: Dockerfile
+    container_name: stocks-scraper
+    ports:
+      - "9094:8080"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@database:5432/stockflow_db
+    depends_on:
+      - database
+
+  news_scraper:
+    build:
+      context: ./backend/news-scraper-service
+      dockerfile: Dockerfile
+    container_name: news-scraper
+    ports:
+      - "9095:8080"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@database:5432/stockflow_db
+    depends_on:
+      - database
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_BACKEND_HOST=http://localhost:9090
+    container_name: frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:

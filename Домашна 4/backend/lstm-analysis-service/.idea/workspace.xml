@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c1d948f3-7394-4b89-a12f-e6eab03ed148" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../app/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/../app/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_news/config.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_news/crawler.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_news/data_utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_news/filters.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_news/script.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_stocks/config.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_stocks/crawler.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_stocks/data/company_data.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_stocks/data/latest_dates.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_stocks/data_utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_stocks/filters.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_stocks/helpers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/crawler_stocks/script.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/database/connection.py" beforeDir="false" afterPath="$PROJECT_DIR$/../app/database/connection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/models/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/models/news.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/models/stock.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../app/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/routers/analysis_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/../app/routers/analysis_router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/routers/stock_router.py" beforeDir="false" afterPath="$PROJECT_DIR$/../app/routers/stock_router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/service/fundamental/fundamental_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/../app/service/fundamental/fundamental_analysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/service/lstm/lstm_analysis.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/service/preprocess/news_preprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/../app/service/preprocess/news_preprocess.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/service/preprocess/stocks_preprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/../app/service/preprocess/stocks_preprocess.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/service/technical/technical_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/../app/service/technical/technical_analysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../../docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../frontend/src/axios/axiosInstance.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../frontend/src/axios/axiosInstance.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2rYAoUYMGIQLl4GJovHfHPzlgAo" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/FINKI/5 semestar/Dizajn-I-Arhitektura-Na-Softver/stockflow/Домашна 4/backend/technical-analysis-service&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\FINKI\5 semestar\Dizajn-I-Arhitektura-Na-Softver\stockflow\Домашна 4\backend\lstm-analysis-service" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.241" />
+        <option value="bundled-python-sdk-0509580d9d50-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.241" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c1d948f3-7394-4b89-a12f-e6eab03ed148" name="Changes" comment="" />
+      <created>1736725809926</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1736725809926</updated>
+      <workItem from="1736725811010" duration="1301000" />
+      <workItem from="1736969783319" duration="126000" />
+      <workItem from="1736969920571" duration="2746000" />
+      <workItem from="1737062865293" duration="2268000" />
+      <workItem from="1737151263982" duration="2677000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

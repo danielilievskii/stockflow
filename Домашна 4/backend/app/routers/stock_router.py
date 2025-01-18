@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 from database.connection import get_db
 
-from models.stock import StockData, LatestDate, StockDataResponse
+from models.stocks import StockData, LatestDate, StockDataResponse
 
 router = APIRouter()
 

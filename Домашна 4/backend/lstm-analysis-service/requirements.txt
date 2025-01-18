@@ -1,0 +1,8 @@
+pandas~=2.2.3
+uvicorn[standard]
+fastapi~=0.115.6
+sqlalchemy~=2.0.34
+psycopg2-binary
+numpy==1.26.4
+tensorflow-cpu
+scikit-learn

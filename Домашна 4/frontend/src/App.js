@@ -1,15 +1,17 @@
 import './App.css';
 import React, {useState} from "react";
 import {BrowserRouter, BrowserRouter as Router, Route, Routes} from "react-router-dom";
-import {Header} from "./views/static/components/header/Header";
-import {StockData} from "./views/static/components/stock-data/StockData";
-import MainPage from "./views/static/pages/MainPage";
-import TechnicalAnalysis from "./views/static/components/analysis/technicalAnalysis";
-import FundamentalAnalysis from "./views/static/components/analysis/fundamentalAnalysis";
-import ModelAnalysis from "./views/static/components/analysis/modelAnalysis";
-import ResultChart from "./views/static/components/analysis/result/ResultChart";
+import {Header} from "./views/dynamic/components/header/Header";
+import {StockData} from "./views/dynamic/components/stock-data/StockData";
+import MainPage from "./views/dynamic/pages/MainPage";
+import TechnicalAnalysis from "./views/dynamic/components/analysis/technicalAnalysis";
+import FundamentalAnalysis from "./views/dynamic/components/analysis/fundamentalAnalysis";
+import ModelAnalysis from "./views/dynamic/components/analysis/modelAnalysis";
+import ResultChart from "./views/dynamic/components/analysis/result/ResultChart";
 
 function App() {
+
+
   return (
     <div className="App">
         <BrowserRouter>
